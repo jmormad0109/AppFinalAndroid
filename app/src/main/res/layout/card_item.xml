@@ -34,6 +34,14 @@
             android:textColor="@android:color/black"/>
 
         <ImageButton
+            android:id="@+id/editButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/edit"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            card_view:tint="@android:color/black" />
+
+        <ImageButton
             android:id="@+id/deleteButton"
             android:layout_width="48dp"
             android:layout_height="48dp"
