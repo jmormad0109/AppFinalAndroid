@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import android.app.AlertDialog
 import android.widget.Button
 import android.widget.EditText
-import com.google.android.material.floatingactionbutton.FloatingActionButton
+import android.widget.Toast
 
 class MainActivity : AppCompatActivity() {
 
@@ -25,26 +25,38 @@ class MainActivity : AppCompatActivity() {
 
         val addButton: Button = findViewById(R.id.addButton)
 
-        // Evento para añadir un elemento
         addButton.setOnClickListener {
-            val editText = EditText(this)
-            editText.hint = "Escribe un nuevo elemento"
 
-            AlertDialog.Builder(this)
-                .setTitle("Agregar nuevo elemento")
-                .setView(editText)
-                .setPositiveButton("Agregar") { _, _ ->
-                    val newItem = editText.text.toString()
-                    if (newItem.isNotEmpty()) {
-                        elementList.add(newItem) // Añadir al final de la lista
-                        adapter.notifyItemInserted(elementList.size - 1) // Notificar al adaptador
+            val dialogView = layoutInflater.inflate(R.layout.dialog_item, null)
+            val editText = dialogView.findViewById<EditText>(R.id.editTextNewItem)
+            val saveButton = dialogView.findViewById<Button>(R.id.saveButton)
+            val cancelButton = dialogView.findViewById<Button>(R.id.cancelButton)
 
-                        // Desplazar el scroll al último elemento
-                        recyclerView.scrollToPosition(elementList.size - 1)
-                    }
+
+            val dialog = AlertDialog.Builder(this)
+                .setView(dialogView)
+                .create()
+
+
+            saveButton.setOnClickListener {
+                val newItem = editText.text.toString()
+                if (newItem.isNotEmpty()) {
+                    elementList.add(newItem)
+                    adapter.notifyItemInserted(elementList.size - 1)
+                    recyclerView.scrollToPosition(elementList.size - 1)
+                    dialog.dismiss()
+                } else {
+                    Toast.makeText(this, "El elemento no puede estar vacío", Toast.LENGTH_SHORT).show()
                 }
-                .setNegativeButton("Cancelar", null)
-                .show()
+            }
+
+            cancelButton.setOnClickListener {
+                dialog.dismiss()
+            }
+
+            dialog.show()
         }
+
+
     }
 }

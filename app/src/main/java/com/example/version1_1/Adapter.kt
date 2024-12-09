@@ -4,9 +4,11 @@ import android.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 
 class Adapter(private var elementList: MutableList<String>) :
@@ -26,7 +28,6 @@ class Adapter(private var elementList: MutableList<String>) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.element.text = "Elemento ${elementList[position]}"
 
-        // Botón de eliminar
         holder.deleteButton.setOnClickListener {
             val currentPosition = holder.bindingAdapterPosition
             if (currentPosition != RecyclerView.NO_POSITION) {
@@ -36,30 +37,48 @@ class Adapter(private var elementList: MutableList<String>) :
             }
         }
 
-        // Botón de editar
         holder.editButton.setOnClickListener {
             val currentPosition = holder.bindingAdapterPosition
             if (currentPosition != RecyclerView.NO_POSITION) {
                 val context = holder.itemView.context
 
-                // Crear un cuadro de diálogo para editar
-                val editText = EditText(context)
+
+                val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_item, null)
+                val editText = dialogView.findViewById<EditText>(R.id.editTextNewItem)
+                val saveButton = dialogView.findViewById<Button>(R.id.saveButton)
+                val cancelButton = dialogView.findViewById<Button>(R.id.cancelButton)
+
+
                 editText.setText(elementList[currentPosition])
-                AlertDialog.Builder(context)
-                    .setTitle("Editar elemento")
-                    .setView(editText)
-                    .setPositiveButton("Guardar") { _, _ ->
-                        val newText = editText.text.toString()
-                        if (newText.isNotEmpty()) {
-                            elementList[currentPosition] = newText
-                            notifyItemChanged(currentPosition) // Notificar cambios al adaptador
-                        }
+
+
+                val dialog = AlertDialog.Builder(context)
+                    .setView(dialogView)
+                    .create()
+
+
+                saveButton.setOnClickListener {
+                    val updatedText = editText.text.toString()
+                    if (updatedText.isNotEmpty()) {
+                        elementList[currentPosition] = updatedText
+                        notifyItemChanged(currentPosition)
+                        dialog.dismiss()
+                    } else {
+                        Toast.makeText(context, "El elemento no puede estar vacío", Toast.LENGTH_SHORT).show()
                     }
-                    .setNegativeButton("Cancelar", null)
-                    .show()
+                }
+
+                cancelButton.setOnClickListener {
+                    dialog.dismiss()
+                }
+
+                dialog.show()
             }
         }
+
+    }
+    override fun getItemCount(): Int = elementList.size
     }
 
-    override fun getItemCount(): Int = elementList.size
-}
+
+
