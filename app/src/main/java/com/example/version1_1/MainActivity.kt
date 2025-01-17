@@ -12,6 +12,8 @@ import android.widget.EditText
 import android.widget.Toast
 import com.example.version1_1.databinding.ActivityLoginBinding
 import com.example.version1_1.databinding.ActivityMainBinding
+import com.example.version1_1.fragment.ListFragment
+import com.example.version1_1.fragment.MainFragment
 import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
@@ -24,59 +26,23 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        if(savedInstanceState == null){
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, MainFragment())
+                .commit()
+        }
+
         activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(activityMainBinding.root)
 
         sharedPreferences = getSharedPreferences("login-info", MODE_PRIVATE)
         auth = FirebaseAuth.getInstance()
 
-        val elementList = mutableListOf<String>()
-        for (i in 1..15) {
-            elementList.add("$i")
-        }
-
-        val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
-        val adapter = Adapter(elementList)
-        recyclerView.adapter = adapter
-
         activityMainBinding.logOutButton.setOnClickListener{
             logOut(this)
         }
-        val addButton: Button = findViewById(R.id.addButton)
 
 
-
-        addButton.setOnClickListener {
-
-            val dialogView = layoutInflater.inflate(R.layout.dialog_item, null)
-            val editText = dialogView.findViewById<EditText>(R.id.editTextNewItem)
-            val saveButton = dialogView.findViewById<Button>(R.id.saveButton)
-            val cancelButton = dialogView.findViewById<Button>(R.id.cancelButton)
-
-
-            val dialog = AlertDialog.Builder(this)
-                .setView(dialogView)
-                .create()
-
-
-            saveButton.setOnClickListener {
-                val newItem = editText.text.toString()
-                if (newItem.isNotEmpty()) {
-                    elementList.add(newItem)
-                    adapter.notifyItemInserted(elementList.size - 1)
-                    recyclerView.scrollToPosition(elementList.size - 1)
-                    dialog.dismiss()
-                } else {
-                    Toast.makeText(this, "El elemento no puede estar vacío", Toast.LENGTH_SHORT).show()
-                }
-            }
-
-            cancelButton.setOnClickListener {
-                dialog.dismiss()
-            }
-
-            dialog.show()
-        }
 
 
 
