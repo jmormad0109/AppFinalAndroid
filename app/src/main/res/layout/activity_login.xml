@@ -6,6 +6,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/styles"
     tools:context=".LoginActivity">
 
 
@@ -54,49 +55,59 @@
 
                 <ImageView
                     android:id="@+id/imageView8"
-                    android:layout_width="200dp"
-                    android:background="@drawable/image"
-                    android:layout_height="200dp" />
+                    android:layout_width="170dp"
+                    android:layout_height="170dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/image" />
 
                 <EditText
                     android:id="@+id/email_edit_text"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="25dp"
                     android:layout_marginBottom="20dp"
                     android:ems="10"
-                    android:hint="Correo"
+                    android:hint="Correo Electrónico"
                     android:inputType="text"
+                    android:textColor="#4EC9ED"
                     android:textSize="20sp" />
 
                 <EditText
                     android:id="@+id/password_edit_text"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="25dp"
                     android:ems="10"
                     android:hint="Contraseña"
                     android:inputType="textPassword"
+                    android:textColor="#4EC9ED"
                     android:textSize="20sp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                        <Button
+                            android:id="@+id/login_button"
+                            android:layout_width="150dp"
+                            android:textColor="@color/purple_500"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="25dp"
+                            android:layout_marginTop="15dp"
+                            android:text="Login"
+                            android:textSize="20sp"
+                            app:backgroundTint="@null" />
 
-                <Button
-                    android:id="@+id/login_button"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="25dp"
-                    android:layout_marginTop="15dp"
-                    android:text="Login"
-                    android:textSize="20sp"
-                    app:backgroundTint="@null" />
-                <Button
-                    android:id="@+id/register_button"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="25dp"
-                    android:layout_marginTop="15dp"
-                    android:text="Registrar"
-                    android:textSize="20sp"
-                    app:backgroundTint="@null" />
+                        <Button
+                            android:id="@+id/register_button"
+                            android:layout_width="150dp"
+                            android:textColor="@color/purple_500"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="25dp"
+                            android:layout_marginTop="15dp"
+                            android:text="Registrar"
+                            android:textSize="20sp"
+                            app:backgroundTint="@null" />
+                </LinearLayout>
+
 
                 <TextView
                     android:id="@+id/reset_password_text"
@@ -105,8 +116,8 @@
                     android:layout_marginVertical="20dp"
                     android:text="Recuperar contraseña"
                     android:layout_marginHorizontal="20dp"
-                    android:textColor="#FF8247"
-                    android:textSize="14sp" />
+                    android:textColor="#000000"
+                    android:textSize="20sp" />
 
         </LinearLayout>
 
