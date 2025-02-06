@@ -1,4 +1,4 @@
-package com.example.version1_1.fragment
+package com.example.version1_1.ui.views.fragment
 
 import android.app.AlertDialog
 import android.content.Context
