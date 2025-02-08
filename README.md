@@ -1,23 +1,70 @@
+# 🚀 Aplicación YourCSStats 🚀
+Aplicación para registrar y guardar los resultados y estadísticas de tus partidas del videojuego CS2.
 
-## Versión 1.4 Navegación
+## ⚙️ Versión 2.1 (MVVM)
 
-En esta versión hemos añadido la navegación de la aplicación.
+En esta versión, no ha habido un cambio con respecto a las funciones de la aplicación, pero si sobre la estructura, y la forma de renderizar las diferentes ventanas y pantallas de la misma. 
 
-Se ha implementado una Toolbar, o barra de herramientas, donde tenenmos varios botones, los cuales son para hacer un cierre de sesión/LogOut, y otro para desplegar el menu de navegación.
+## 📂 Estructura
+Se ha creado una nueva estructura de los archivos de la aplicación.
+```plaintext
+/java/com/example/version1_1
+│
+├── LoginActivity.kt              Pantalla de inicio de sesión
+├── RegisterActivity.kt           Pantalla de registro de usuarios
+│
+├── /data                         Capa de datos de la aplicación
+│   ├── /datasource               Fuentes de datos
+│   │   └── Partidas.kt           Gestión de partidas
+│   ├── /models                   Modelos de datos
+│   │   └── Partida.kt            Modelo de una partida
+│   ├── /repository               Repositorio de datos
+│   │   └── PartidaRepository.kt  Lógica de acceso a datos
+│   ├── /service                  Servicios de datos
+│   │   └── PartidaService.kt     Servicios relacionados con partidas
+│
+├── /domain                       Capa de dominio (lógica de negocio)
+│   ├── /models                   Modelos de dominio
+│   │   ├── Partida.kt            Modelo de una partida en la lógica de negocio
+│   │   ├── PartidaData.kt        Datos adicionales de partida
+│   ├── /repository               Interfaces de acceso a datos
+│   │   └── PartidaRepositoryInterface.kt  Interfaz del repositorio de partidas
+│   ├── /usecase                  Casos de uso
+│   │   ├── DeletePartidaUseCase.kt  Eliminar una partida
+│   │   ├── EditPartidaUseCase.kt    Editar una partida
+│   │   ├── GetPartidasUseCase.kt    Obtener partidas
+│   │   └── InsertPartidaUseCase.kt  Insertar una partida
+│
+├── /ui                           Capa de presentación
+│   ├── /adapter                  Adaptadores para la vista
+│   │   ├── AdapterPartida.kt      Adaptador para partidas
+│   │   ├── ViewHolderPartida.kt   ViewHolder para partidas
+│   ├── /modelview                ViewModels
+│   │   └── PartidasViewModel.kt   ViewModel de partidas
+│   ├── /views                    Vistas de la aplicación
+│   │   ├── MainActivity.kt        Pantalla principal
+│   │   ├── /fragment              Fragmentos de la UI
+│   │   │   ├── AddPartidaDialogFragment.kt  Diálogo para agregar partida
+│   │   │   ├── EditPartidaDialogFragment.kt Diálogo para editar partida
+│   │   │   ├── MainFragment.kt   Fragmento principal
+│   │   │   ├── PartidasFragment.kt Fragmento de lista de partidas
+```
 
-Este menú es un NavigatiónView, que está compuesto por dos partes.
+## 📂 Descripción de cada capa
 
-La primera es la cabecéra, donde tenemos una imagen de perfil, el nombre del usuario y el correo.
+### 1️⃣ **Data (`/data/`)**
+Esta capa es responsable de manejar la fuente de datos de la aplicación. Contiene modelos de datos, fuentes de datos locales o remotas(actualmente, solo locales), y repositorios que actúan como intermediarios entre la capa de datos y la capa de dominio.
 
-Debajo de la cabecera encontramos los diferentes menús por los que podemos navegar en nuestra aplicación. 
+### 2️⃣ **Domain (`/domain/`)**
+La capa de dominio contiene la lógica de negocio central de la aplicación. Define modelos específicos del dominio, interfaces de repositorio y casos de uso que representan acciones clave dentro de la app.
 
-Tenemos el botón de Inicio, donde, en esta versión, tendremos un simple bienvenida a la aplicación, junto a un botón que nos llevará a la pantalla del listado.
+### 3️⃣ **UI (`/ui/`)**
+Esta capa maneja la presentación de la aplicación. Incluye adaptadores, `ViewModels` que gestionan los datos para la vista, y las propias vistas representadas por actividades y fragmentos.
 
-También tenemos un botón de Perfil, que también sirve para ir al listado del usuario. Este será el botón principal para navergar asta dicha pantalla, ya que la pantalla de bienvenida será cambiada en proximas versiones.
+---
 
-Por último tenemmos un botón de Configuración, que actualmente no funciona, ya que esa parte todavía está en desarrollo.
+## 🔄 Flujo de Datos en MVVM
+```plaintext
+Vista (Activity/Fragment) <---> ViewModel <---> Repository <---> Base de Datos/API
+```
 
-
-Estos serían los cambios principales y visibles realizados en esta versión.
-
-Ademas, para poder implementar la navegación, he cambiado la forma en la que estába estructurada la aplicación. Hemos pasado de una unica Activity para mostrar todo, ha varios fragmentos, los cuales son cada una de las pantallas de la navegación, los cuales se cargan o renderizan dentro de la Main Activity.
