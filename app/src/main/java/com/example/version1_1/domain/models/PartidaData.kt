@@ -1,7 +1,7 @@
 package com.example.version1_1.domain.models
 
-class Repository {
+class PartidaData {
     companion object{
-        var partidas: List<Partida> = emptyList()
+        var partida:List<Partida> = emptyList()
     }
 }

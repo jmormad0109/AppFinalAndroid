@@ -31,7 +31,7 @@ class MainFragment: Fragment() {
         val boton: Button = view.findViewById(R.id.btn_lista)
         boton.setOnClickListener{
             parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, ListFragment())
+                .replace(R.id.fragment_container, PartidasFragment())
                 .addToBackStack(null)
                 .commit()
         }

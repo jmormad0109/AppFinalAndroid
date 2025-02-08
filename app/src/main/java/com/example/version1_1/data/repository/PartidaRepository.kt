@@ -1,43 +1,57 @@
 package com.example.version1_1.data.repository
 
-import com.example.version1_1.data.datasource.database.dao.PartidaDao
-import com.example.version1_1.data.datasource.database.entities.PartidaEntity
-import com.example.version1_1.data.datasource.memoria.service.PartidaService
-import com.example.version1_1.domain.mapper.toPartida
-import com.example.version1_1.domain.mapper.toPartidaEntity
+import com.example.version1_1.data.service.PartidaService
 import com.example.version1_1.domain.models.Partida
-import com.example.version1_1.domain.models.Repository
 import com.example.version1_1.domain.repository.PartidaRepositoryInterface
-import javax.inject.Inject
 
-class PartidaRepository @Inject constructor(
-    private val service: PartidaService,
-    private val partidaDao: PartidaDao
+class PartidaRepository (
+    private val service: PartidaService = PartidaService()
 ) : PartidaRepositoryInterface {
-    override fun getPartidas(): List<Partida> {
-        val data = service.getPartidas()
-
-        Repository.partidas = data.map { it.toPartida() }
-        return Repository.partidas
+    override suspend fun getAll(): List<Partida> {
+        val partidas = service.getPartidas()
+        return partidas.map { partida -> Partida(
+            partida.id,
+            partida.resultado,
+            partida.estadistica,
+            partida.fecha
+        )
+        }
     }
 
-    override suspend fun getPartidasEntity(): List<Partida> {
-        val listEntity: List<PartidaEntity> = partidaDao.getPartidas()
-        Repository.partidas = listEntity.map { it.toPartida() }
-        return Repository.partidas
+    override suspend fun insert(partida: Partida) {
+
+        val newPartida = com.example.version1_1.data.models.Partida(
+            partida.id,
+            partida.resultado,
+            partida.estadistica,
+            partida.fecha
+        )
+
+        service.insertPartidas(newPartida)
     }
 
-    override suspend fun insertPartidas(listPartidasEntity: List<PartidaEntity>) {
-        partidaDao.insertPartidas(listPartidasEntity)
+    override suspend fun editPartida(partida: Partida, nuevaPartida: Partida) {
+        val partida = com.example.version1_1.data.models.Partida(
+            partida.id,
+            partida.resultado,
+            partida.estadistica,
+            partida.fecha
+        )
+
+        val nuevaPartida = com.example.version1_1.data.models.Partida(
+            nuevaPartida.id,
+            nuevaPartida.resultado,
+            nuevaPartida.estadistica,
+            nuevaPartida.fecha
+
+        )
+
+        service.editPartida(partida, nuevaPartida)
     }
 
-    override suspend fun insertPartida(partidaEntity: PartidaEntity): Partida {
-        partidaDao.insertPartida(partidaEntity)
-        return partidaEntity.toPartida()
-    }
-
-    override suspend fun deletePartida(partidaEntity: PartidaEntity) {
-        partidaDao.deletePartida(partidaEntity.id)
+    override suspend fun delete(id: Int): Boolean {
+        service.deletePartida(id)
+        return true
     }
 
 

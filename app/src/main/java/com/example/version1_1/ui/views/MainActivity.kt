@@ -15,7 +15,7 @@ import androidx.fragment.app.Fragment
 import com.example.version1_1.LoginActivity
 import com.example.version1_1.R
 import com.example.version1_1.databinding.ActivityMainBinding
-import com.example.version1_1.ui.views.fragment.ListFragment
+import com.example.version1_1.ui.views.fragment.PartidasFragment
 import com.example.version1_1.ui.views.fragment.MainFragment
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity() {
         navView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.nav_home -> navigateToFragment(MainFragment())
-                R.id.nav_profile -> navigateToFragment(ListFragment())
+                R.id.nav_profile -> navigateToFragment(PartidasFragment())
                 //R.id.nav_settings -> navigateToFragment(SettingsFragment())
             }
             // Cerrar el drawer después de seleccionar una opción
