@@ -8,7 +8,7 @@ class PartidaService{
 
     private val data = PartidasData()
 
-    suspend fun  getPartidas(): List<com.example.version1_1.data.models.Partida> {
+    suspend fun  getPartidas(): List<Partida> {
         return data.getPartidas()
     }
 

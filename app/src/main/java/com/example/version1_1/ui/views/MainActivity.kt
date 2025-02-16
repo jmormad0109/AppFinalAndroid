@@ -17,6 +17,7 @@ import com.example.version1_1.R
 import com.example.version1_1.databinding.ActivityMainBinding
 import com.example.version1_1.ui.views.fragment.PartidasFragment
 import com.example.version1_1.ui.views.fragment.MainFragment
+import com.example.version1_1.ui.views.fragment.SettingsFragment
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 
@@ -63,7 +64,7 @@ class MainActivity : AppCompatActivity() {
             when (menuItem.itemId) {
                 R.id.nav_home -> navigateToFragment(MainFragment())
                 R.id.nav_profile -> navigateToFragment(PartidasFragment())
-                //R.id.nav_settings -> navigateToFragment(SettingsFragment())
+                R.id.nav_settings -> navigateToFragment(SettingsFragment())
             }
             // Cerrar el drawer después de seleccionar una opción
             drawerLayout.closeDrawer(GravityCompat.START)

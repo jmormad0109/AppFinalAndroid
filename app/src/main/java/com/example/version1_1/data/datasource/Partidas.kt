@@ -34,7 +34,6 @@ class PartidasData {
             partidasList[indice] = nuevaPartida
         }
     }
-
     fun deletePartida(idPartida: Int){
         partidasList.removeAt(idPartida)
     }
