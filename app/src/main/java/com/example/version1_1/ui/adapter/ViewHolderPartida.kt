@@ -1,5 +1,6 @@
 package com.example.version1_1.ui.adapter
 
+import android.net.Uri
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -12,11 +13,21 @@ class ViewHolderPartida(view: View) : RecyclerView.ViewHolder(view) {
 
 
     fun rendereize(partida: Partida) {
-
         binding.resultadoTxt.text = partida.resultado
         binding.estadisticaTxt.text = partida.estadistica
         binding.fechaTxt.text = partida.fecha
 
-        Glide.with(itemView.context).load(R.drawable.mirage).centerCrop().into(binding.imagenCard)
+        if (!partida.fotoUri.isNullOrEmpty()) {
+            Glide.with(itemView.context)
+                .load(partida.fotoUri)
+                .centerCrop()
+                .into(binding.imagenCard)
+        } else {
+            Glide.with(itemView.context)
+                .load(R.drawable.mirage)
+                .centerCrop()
+                .into(binding.imagenCard)
+        }
     }
+
 }

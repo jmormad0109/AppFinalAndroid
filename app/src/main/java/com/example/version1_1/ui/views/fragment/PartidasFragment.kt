@@ -102,8 +102,4 @@ class PartidasFragment: Fragment(R.layout.fragment_list) {
             adapter.notifyDataSetChanged()
         }
     }
-
-
-
-
 }

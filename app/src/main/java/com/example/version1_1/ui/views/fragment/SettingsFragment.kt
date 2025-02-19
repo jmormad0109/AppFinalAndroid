@@ -83,5 +83,24 @@ class SettingsFragment: Fragment(R.layout.fragment_settings) {
 
         img.setImageResource(R.drawable.luffy)
     }
+/*
+* private fun hacerFoto(){
+        val intent =  Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        hacerFotoCamara.launch(intent)
+    }
+    private val hacerFotoCamara =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                result ->
+            if (result.resultCode == Activity.RESULT_OK){
+                val bitmap = result.data?.extras?.get("data") as Bitmap
+                actualizarImagen(bitmap)
+            }
+        }
 
+    private fun actualizarImagen(bitmap: Bitmap){
+        val navigationView = requireActivity().findViewById<NavigationView>(R.id.navigation_view)
+        val header = navigationView.getHeaderView(0)
+        val img = header.findViewById<ImageView>(R.id.img_Nav_Header)
+        img.setImageBitmap(bitmap)
+    }*/
 }

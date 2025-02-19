@@ -1,3 +1,4 @@
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -29,7 +30,6 @@ class AdapterPartida(
         holder.itemView.findViewById<ImageView>(R.id.deleteButton).setOnClickListener{
             delete(position)
         }
-
         holder.rendereize(partida)
 
     }
