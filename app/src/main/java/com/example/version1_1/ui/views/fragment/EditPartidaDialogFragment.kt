@@ -129,8 +129,9 @@ class EditPartidaDialogFragment : DialogFragment() {
     }
 
     private fun recoverDataLayout(): Partida {
+        val idPartida = requireArguments().getInt("id")
         return Partida(
-            id = requireArguments().getInt("id"),
+            id = idPartida,
             resultado = binding.editResultado.text.toString(),
             estadistica = binding.editEstadistica.text.toString(),
             fecha = binding.editFecha.text.toString(),

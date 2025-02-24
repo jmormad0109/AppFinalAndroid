@@ -25,14 +25,15 @@ class PartidasViewModel(): ViewModel() {
 
     fun getPartidas() {
         viewModelScope.launch {
-            progresBar.value = true
 
-            var data = getPartidasUseCase()
-
-            if (data != null){
-                partidaLiveData.value = data
-                progresBar.value = false
+            if (partidaLiveData.value.isNullOrEmpty()){
+                var data = getPartidasUseCase()
+                if (data != null){
+                    partidaLiveData.postValue(data)
+                    progresBar.postValue(false)
+                }
             }
+
         }
     }
 
@@ -47,16 +48,26 @@ class PartidasViewModel(): ViewModel() {
     fun editPartida(partida: Partida, nuevaPartida: Partida){
         viewModelScope.launch {
             editPartidaUseCase(partida, nuevaPartida)
-            val actualizarLista = getPartidasUseCase()
-            partidaLiveData.postValue(actualizarLista)
+
+            val listaActual = partidaLiveData.value?.toMutableList() ?: mutableListOf()
+            val index = listaActual.indexOfFirst { it.id == partida.id }
+
+            if (index != -1){
+                listaActual[index] = nuevaPartida
+                partidaLiveData.postValue(listaActual)
+            }
         }
     }
 
     fun deletePartida(pos: Int){
         viewModelScope.launch {
-            deletePartidaUseCase(pos)
-            val actualizarLista = getPartidasUseCase()
-            partidaLiveData.postValue(actualizarLista)
+            val listaActual = partidaLiveData.value?.toMutableList() ?: mutableListOf()
+
+            if (pos in listaActual.indices){
+                listaActual.removeAt(pos)
+                partidaLiveData.postValue(listaActual)
+            }
+
         }
     }
 }
