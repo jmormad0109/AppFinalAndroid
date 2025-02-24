@@ -2,6 +2,7 @@ package com.example.version1_1.ui.views.fragment
 
 import AdapterPartida
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -49,7 +50,7 @@ class PartidasFragment: Fragment(R.layout.fragment_list) {
     }
 
     private fun deletePartida(pos: Int){
-        val partidaId = adapter.listaPartidas[pos].id
+
         partidasViewModel.deletePartida(pos)
         Toast.makeText(requireContext(), "Partida eliminada.", Toast.LENGTH_LONG).show()
     }
@@ -61,6 +62,7 @@ class PartidasFragment: Fragment(R.layout.fragment_list) {
             putString("resultado", partida.resultado)
             putString("estadistica", partida.estadistica)
             putString("fecha", partida.fecha)
+            putString("fotoUri", partida.fotoUri)
         }
 
         dialog.arguments = args
@@ -96,10 +98,8 @@ class PartidasFragment: Fragment(R.layout.fragment_list) {
     }
 
     private fun actualizarPartidas(partidas: List<Partida>){
-        if (adapter.listaPartidas != partidas){
-            val tamano = adapter.listaPartidas.size
-            adapter.listaPartidas = partidas
-            adapter.notifyDataSetChanged()
-        }
+        adapter.listaPartidas = partidas
+        adapter.notifyDataSetChanged()
+
     }
 }

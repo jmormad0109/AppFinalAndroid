@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -91,7 +92,7 @@ class EditPartidaDialogFragment : DialogFragment() {
             val editarPartida = recoverDataLayout()
             if (editarPartida.isValid()) {
                 val partidaActualizada = editarPartida.copy(
-                    fotoUri = photoUri?.toString()
+                    fotoUri = photoUri?.toString() ?: requireArguments().getString("fotoUri")
                 )
                 editPartida?.invoke(partidaActualizada)
                 dismiss()
@@ -133,7 +134,7 @@ class EditPartidaDialogFragment : DialogFragment() {
             resultado = binding.editResultado.text.toString(),
             estadistica = binding.editEstadistica.text.toString(),
             fecha = binding.editFecha.text.toString(),
-            fotoUri = null
+            fotoUri = photoUri?.toString()
         )
     }
 

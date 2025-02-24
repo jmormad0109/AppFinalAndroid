@@ -13,7 +13,8 @@ class PartidaRepository (
             partida.id,
             partida.resultado,
             partida.estadistica,
-            partida.fecha
+            partida.fecha,
+            partida.fotoUri
         )
         }
     }
@@ -24,7 +25,8 @@ class PartidaRepository (
             partida.id,
             partida.resultado,
             partida.estadistica,
-            partida.fecha
+            partida.fecha,
+            partida.fotoUri
         )
 
         service.insertPartidas(newPartida)
@@ -35,14 +37,16 @@ class PartidaRepository (
             partida.id,
             partida.resultado,
             partida.estadistica,
-            partida.fecha
+            partida.fecha,
+            partida.fotoUri
         )
 
         val nuevaPartida = com.example.version1_1.data.models.Partida(
             nuevaPartida.id,
             nuevaPartida.resultado,
             nuevaPartida.estadistica,
-            nuevaPartida.fecha
+            nuevaPartida.fecha,
+            nuevaPartida.fotoUri
 
         )
 

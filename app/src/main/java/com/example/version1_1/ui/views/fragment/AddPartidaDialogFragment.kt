@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -123,7 +124,7 @@ class AddPartidaDialogFragment : DialogFragment() {
             resultado = binding.editResultado.text.toString(),
             estadistica = binding.editEstadistica.text.toString(),
             fecha = binding.editFecha.text.toString(),
-            fotoUri = null
+            fotoUri = photoUri?.toString()
         )
     }
 
@@ -131,4 +132,3 @@ class AddPartidaDialogFragment : DialogFragment() {
         return resultado.isNotEmpty() && estadistica.isNotEmpty() && fecha.isNotEmpty()
     }
 }
-

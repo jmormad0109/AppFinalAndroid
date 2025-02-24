@@ -1,5 +1,6 @@
 package com.example.version1_1.ui.modelview
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -38,7 +39,6 @@ class PartidasViewModel(): ViewModel() {
     fun insertPartida(partida: Partida) {
         viewModelScope.launch {
             insetPartidasUseCase(partida)
-
             val actualizarLista = getPartidasUseCase()
             partidaLiveData.postValue(actualizarLista)
         }
