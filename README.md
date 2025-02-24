@@ -68,3 +68,9 @@ Esta capa maneja la presentación de la aplicación. Incluye adaptadores, `ViewM
 Vista (Activity/Fragment) <---> ViewModel <---> Repository <---> Base de Datos/API
 ```
 
+
+## ⚙️ Versión 3.1 (Imágenes)
+
+En esta versión, se ha implementado la posibilidad de cambiar las imágenes de las partidas. 
+
+Se puede o bien, elegir una foto de la galería de nuestro telefono, o usar la cámara para hacer una nueva fotografía. Es posible añadir una foto a la hora de crear la partida, como cambiarla una vez ya creada. Si no se elige una foto ni de la galería, ni usando la cámara, se cargará una imagen por defecto predefinida.
