@@ -29,11 +29,11 @@
                             android:background="@drawable/image" />
 
                         <EditText
-                            android:id="@+id/email_edit_text"
+                            android:id="@+id/dni_edit_text"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Correo Electrónico"
-                            android:inputType="textEmailAddress"
+                            android:hint="DNI"
+                            android:inputType="text"
                             android:textSize="18sp"
                             android:padding="10dp"
                             android:background="@android:drawable/edit_text"/>

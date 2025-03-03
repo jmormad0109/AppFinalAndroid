@@ -11,6 +11,11 @@ interface AuthService {
     @POST("register")
     fun register(@Body user: User): Call<Void>
 
-    @POST("login")
-    fun login(@Body user: User): Call<AuthResponse>
+    @POST("auth")
+    fun login(@Body loginRequest: LoginRequest): Call<AuthResponse>
 }
+
+data class LoginRequest(
+    val dni: String,
+    val password: String
+)

@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.version1_1.data.models.User
+import com.example.version1_1.data.service.RetrofitClient
 import com.example.version1_1.databinding.ActivityRegisterBinding
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -13,6 +14,9 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 import com.google.firebase.auth.auth
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import retrofit2.Retrofit
 
 class RegisterActivity : AppCompatActivity() {
@@ -47,7 +51,21 @@ class RegisterActivity : AppCompatActivity() {
             }
 
             val user = User(dni, name, email, password)
-            RetrofitClient
+            RetrofitClient.authService.register(user).enqueue(object : Callback<Void> {
+                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                    if (response.isSuccessful){
+                        Toast.makeText(this@RegisterActivity, "Registro exitoso, inicia sesión", Toast.LENGTH_LONG).show()
+                        startActivity(Intent(this@RegisterActivity, LoginActivity::class.java))
+                        finish()
+                    }else{
+                        Toast.makeText(this@RegisterActivity, "Error al registrarse con el usuario", Toast.LENGTH_LONG).show()
+                    }
+                }
+
+                override fun onFailure(call: Call<Void>, t: Throwable) {
+                    Toast.makeText(this@RegisterActivity, "Error: ${t.message}", Toast.LENGTH_LONG).show()
+                }
+            })
         }
 
 
