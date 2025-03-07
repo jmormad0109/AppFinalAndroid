@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.version1_1.data.models.Partida
 import com.example.version1_1.databinding.FragmentPartidaBinding
 import com.example.version1_1.ui.adapter.PartidaAdapter
+import com.example.version1_1.ui.dialog.AddPartidaDialogFragment
+import com.example.version1_1.ui.dialog.EditPartidaDialogFragment
 import com.example.version1_1.ui.viewmodel.PartidaViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -39,8 +41,12 @@ class PartidaFragment : Fragment() {
         setupObservers()
 
         binding.addButton.setOnClickListener {
-            agregarNuevaPartida()
+            val dialog = AddPartidaDialogFragment { partida ->
+                viewModel.agregarPartida(partida)
+            }
+            dialog.show(childFragmentManager, "AddPartidaDialog")
         }
+
 
         viewModel.cargarPartidas()
     }
@@ -78,10 +84,12 @@ class PartidaFragment : Fragment() {
     }
 
     private fun editarPartida(partida: Partida) {
-        val partidaActualizada = partida.copy(resultado = "PERDIDO")
-        viewModel.actualizarPartida(partida.nombre, partidaActualizada)
-        Toast.makeText(requireContext(), "Partida actualizada", Toast.LENGTH_SHORT).show()
+        val dialog = EditPartidaDialogFragment(partida) { partidaEditada ->
+            viewModel.actualizarPartida(partida.nombre, partidaEditada)
+        }
+        dialog.show(childFragmentManager, "EditPartidaDialog")
     }
+
 
     private fun eliminarPartida(partida: Partida) {
         viewModel.eliminarPartida(partida.nombre)

@@ -1,134 +1,48 @@
-package com.example.version1_1.ui.views.fragment
+package com.example.version1_1.ui.dialog
 
-import android.Manifest
-import android.content.ContentValues
-import android.content.pm.PackageManager
-import android.net.Uri
+import android.app.Dialog
+import android.content.Context
 import android.os.Bundle
-import android.provider.MediaStore
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import com.example.version1_1.data.models.Partida
 import com.example.version1_1.databinding.FragmentAddPartidaBinding
-import com.example.version1_1.domain.models.Partida
-import java.text.SimpleDateFormat
-import java.util.*
 
-class AddPartidaDialogFragment : DialogFragment() {
+class AddPartidaDialogFragment(private val onPartidaAdded: (Partida) -> Unit) : DialogFragment() {
 
-    private lateinit var binding: FragmentAddPartidaBinding
+    private var _binding: FragmentAddPartidaBinding? = null
+    private val binding get() = _binding!!
 
-    var addPartida: ((Partida) -> Unit)? = null
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val dialog = Dialog(requireContext())
+        _binding = FragmentAddPartidaBinding.inflate(layoutInflater)
+        dialog.setContentView(binding.root)
 
-    private var photoUri: Uri? = null
-
-
-    private lateinit var cameraPermissionLauncher: ActivityResultLauncher<String>
-    private lateinit var takePhotoLauncher: ActivityResultLauncher<Uri>
-    private lateinit var galleryLauncher: ActivityResultLauncher<String>
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        cameraPermissionLauncher =
-            registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-                if (isGranted) {
-                    launchCamera()
-                } else {
-                    Toast.makeText(requireContext(), "Permiso de cámara denegado", Toast.LENGTH_SHORT).show()
-                }
-            }
-
-        takePhotoLauncher =
-            registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
-                if (success) {
-                    binding.imgViewAddDialog.setImageURI(photoUri)
-                } else {
-                    Toast.makeText(requireContext(), "Error al capturar la foto", Toast.LENGTH_SHORT).show()
-                }
-            }
-
-        galleryLauncher =
-            registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-                uri?.let {
-                    photoUri = it
-                    binding.imgViewAddDialog.setImageURI(it)
-                }
-            }
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        binding = FragmentAddPartidaBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        crearListener()
-    }
-
-    private fun crearListener() {
         binding.btnGuardar.setOnClickListener {
-            val nuevaPartida = recoverDataLayout()
-            if (nuevaPartida.isValid()) {
-                // Se crea la partida incluyendo el URI de la foto (convertido a String)
-                val partidaConFoto = nuevaPartida.copy(
-                    fotoUri = photoUri?.toString()
-                )
-                addPartida?.invoke(partidaConFoto)
-                dismiss()
-            } else {
-                Toast.makeText(activity, "Rellene todos los campos", Toast.LENGTH_LONG).show()
+            val nombre = binding.editNombre.text.toString().trim()
+            val resultado = binding.editResultado.text.toString().trim().uppercase()
+            val estadistica = binding.editEstadistica.text.toString().trim()
+            val fecha = binding.editFecha.text.toString().trim()
+
+            if (nombre.isEmpty() || resultado.isEmpty() || estadistica.isEmpty() || fecha.isEmpty()) {
+                Toast.makeText(requireContext(), "Todos los campos son obligatorios", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
             }
+
+            val nuevaPartida = Partida(nombre, resultado, estadistica, fecha)
+            onPartidaAdded(nuevaPartida)
+            dismiss()
         }
 
-        binding.btnCancelar.setOnClickListener { dismiss() }
-
-        binding.btnCamara.setOnClickListener {
-            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-                launchCamera()
-            } else {
-                cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
-            }
+        binding.btnCancelar.setOnClickListener {
+            dismiss()
         }
 
-        binding.btnGaleria.setOnClickListener {
-            launchGallery()
-        }
+        return dialog
     }
 
-    private fun launchCamera() {
-        val filename = "IMG_" + SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date()) + ".jpg"
-        val contentValues = ContentValues().apply {
-            put(MediaStore.Images.Media.DISPLAY_NAME, filename)
-            put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
-        }
-        photoUri = requireActivity().contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
-        photoUri?.let { takePhotoLauncher.launch(it) }
-    }
-
-    private fun launchGallery() {
-        galleryLauncher.launch("image/*")
-    }
-
-    private fun recoverDataLayout(): Partida {
-        val numId = 1
-        return Partida(
-            id = numId,
-            resultado = binding.editResultado.text.toString(),
-            estadistica = binding.editEstadistica.text.toString(),
-            fecha = binding.editFecha.text.toString(),
-            fotoUri = photoUri?.toString()
-        )
-    }
-
-    private fun Partida.isValid(): Boolean {
-        return resultado.isNotEmpty() && estadistica.isNotEmpty() && fecha.isNotEmpty()
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

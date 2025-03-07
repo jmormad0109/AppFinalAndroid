@@ -25,11 +25,13 @@ class PartidaRepository {
     }
 
     suspend fun updatePartida(nombrePartida: String, partida: Partida): Partida? {
+        val partidaCorregida = partida.copy(resultado = partida.resultado.uppercase()) // 🔥 Aquí convertimos a mayúsculas
         return withContext(Dispatchers.IO) {
-            val response = api.updatePartida(nombrePartida, partida)
+            val response = api.updatePartida(nombrePartida, partidaCorregida)
             if (response.isSuccessful) response.body() else null
         }
     }
+
 
     suspend fun deletePartida(nombrePartida: String): Boolean {
         return withContext(Dispatchers.IO) {
