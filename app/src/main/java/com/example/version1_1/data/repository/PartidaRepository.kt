@@ -1,62 +1,40 @@
 package com.example.version1_1.data.repository
 
-import com.example.version1_1.data.service.PartidaService
-import com.example.version1_1.domain.models.Partida
-import com.example.version1_1.domain.repository.PartidaRepositoryInterface
+import com.example.version1_1.data.models.Partida
+import com.example.version1_1.data.service.RetrofitClient
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
-class PartidaRepository (
-    private val service: PartidaService = PartidaService()
-) : PartidaRepositoryInterface {
-    override suspend fun getAll(): List<Partida> {
-        val partidas = service.getPartidas()
-        return partidas.map { partida -> Partida(
-            partida.id,
-            partida.resultado,
-            partida.estadistica,
-            partida.fecha,
-            partida.fotoUri
-        )
+
+class PartidaRepository {
+
+    private val api = RetrofitClient.partidaService
+
+    suspend fun getPartidas(): List<Partida>? {
+        return withContext(Dispatchers.IO) {
+            val response = api.getPartidas()
+            if (response.isSuccessful) response.body() else null
         }
     }
 
-    override suspend fun insert(partida: Partida) {
-
-        val newPartida = com.example.version1_1.data.models.Partida(
-            partida.id,
-            partida.resultado,
-            partida.estadistica,
-            partida.fecha,
-            partida.fotoUri
-        )
-
-        service.insertPartidas(newPartida)
+    suspend fun addPartida(partida: Partida): Partida? {
+        return withContext(Dispatchers.IO) {
+            val response = api.addPartida(partida)
+            if (response.isSuccessful) response.body() else null
+        }
     }
 
-    override suspend fun editPartida(partida: Partida, nuevaPartida: Partida) {
-        val partida = com.example.version1_1.data.models.Partida(
-            partida.id,
-            partida.resultado,
-            partida.estadistica,
-            partida.fecha,
-            partida.fotoUri
-        )
-
-        val nuevaPartida = com.example.version1_1.data.models.Partida(
-            nuevaPartida.id,
-            nuevaPartida.resultado,
-            nuevaPartida.estadistica,
-            nuevaPartida.fecha,
-            nuevaPartida.fotoUri
-
-        )
-
-        service.editPartida(partida, nuevaPartida)
+    suspend fun updatePartida(nombrePartida: String, partida: Partida): Partida? {
+        return withContext(Dispatchers.IO) {
+            val response = api.updatePartida(nombrePartida, partida)
+            if (response.isSuccessful) response.body() else null
+        }
     }
 
-    override suspend fun delete(id: Int): Boolean {
-        service.deletePartida(id)
-        return true
+    suspend fun deletePartida(nombrePartida: String): Boolean {
+        return withContext(Dispatchers.IO) {
+            val response = api.deletePartida(nombrePartida)
+            response.isSuccessful
+        }
     }
-
-
 }

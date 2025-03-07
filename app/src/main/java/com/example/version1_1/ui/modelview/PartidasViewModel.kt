@@ -1,73 +1,49 @@
-package com.example.version1_1.ui.modelview
+package com.example.version1_1.ui.viewmodel
 
-import android.util.Log
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.version1_1.data.models.Partida
 import com.example.version1_1.data.repository.PartidaRepository
-import com.example.version1_1.domain.models.Partida
-import com.example.version1_1.domain.usecase.DeletePartidaUseCase
-import com.example.version1_1.domain.usecase.EditPartidaUseCase
-import com.example.version1_1.domain.usecase.GetPartidasUseCase
-import com.example.version1_1.domain.usecase.InsertPartidaUseCase
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class PartidasViewModel(): ViewModel() {
+class PartidaViewModel(private val repository: PartidaRepository = PartidaRepository()) : ViewModel() {
 
-    val partidaLiveData = MutableLiveData<List<Partida>>()
-    private val progresBar = MutableLiveData<Boolean>()
-    private val repositorio: PartidaRepository = PartidaRepository()
-    private val getPartidasUseCase: GetPartidasUseCase = GetPartidasUseCase(repositorio)
-    private val insetPartidasUseCase: InsertPartidaUseCase = InsertPartidaUseCase(repositorio)
-    private val editPartidaUseCase: EditPartidaUseCase = EditPartidaUseCase(repositorio)
-    private val deletePartidaUseCase: DeletePartidaUseCase = DeletePartidaUseCase(repositorio)
+    private val _partidas = MutableStateFlow<List<Partida>>(emptyList())
+    val partidas: StateFlow<List<Partida>> get() = _partidas
 
-
-    fun getPartidas() {
+    fun cargarPartidas() {
         viewModelScope.launch {
-
-            if (partidaLiveData.value.isNullOrEmpty()){
-                var data = getPartidasUseCase()
-                if (data != null){
-                    partidaLiveData.postValue(data)
-                    progresBar.postValue(false)
-                }
-            }
-
+            val partidasList = repository.getPartidas()
+            _partidas.value = partidasList ?: emptyList()
         }
     }
 
-    fun insertPartida(partida: Partida) {
+    fun agregarPartida(partida: Partida) {
         viewModelScope.launch {
-            insetPartidasUseCase(partida)
-            val actualizarLista = getPartidasUseCase()
-            partidaLiveData.postValue(actualizarLista)
-        }
-    }
-
-    fun editPartida(partida: Partida, nuevaPartida: Partida){
-        viewModelScope.launch {
-            editPartidaUseCase(partida, nuevaPartida)
-
-            val listaActual = partidaLiveData.value?.toMutableList() ?: mutableListOf()
-            val index = listaActual.indexOfFirst { it.id == partida.id }
-
-            if (index != -1){
-                listaActual[index] = nuevaPartida
-                partidaLiveData.postValue(listaActual)
+            val nuevaPartida = repository.addPartida(partida)
+            if (nuevaPartida != null) {
+                cargarPartidas() // Recargar lista tras agregar
             }
         }
     }
 
-    fun deletePartida(pos: Int){
+    fun actualizarPartida(nombrePartida: String, partidaActualizada: Partida) {
         viewModelScope.launch {
-            val listaActual = partidaLiveData.value?.toMutableList() ?: mutableListOf()
-
-            if (pos in listaActual.indices){
-                listaActual.removeAt(pos)
-                partidaLiveData.postValue(listaActual)
+            val partidaEditada = repository.updatePartida(nombrePartida, partidaActualizada)
+            if (partidaEditada != null) {
+                cargarPartidas() // Recargar lista tras editar
             }
+        }
+    }
 
+    fun eliminarPartida(nombrePartida: String) {
+        viewModelScope.launch {
+            val eliminada = repository.deletePartida(nombrePartida)
+            if (eliminada) {
+                cargarPartidas() // Recargar lista tras eliminar
+            }
         }
     }
 }

@@ -1,3 +1,10 @@
 package com.example.version1_1.data.models
 
-data class Partida (val id: Int, val resultado: String, val estadistica: String, val fecha: String, val fotoUri: String? = null)
+import com.google.gson.annotations.SerializedName
+
+data class Partida(
+    @SerializedName("nombrePartida") val nombre: String,
+    @SerializedName("resultado") val resultado: String,
+    @SerializedName("estadistica") val estadistica: String,
+    @SerializedName("fecha") val fecha: String
+)

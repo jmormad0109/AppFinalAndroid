@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import com.example.version1_1.R
+import com.example.version1_1.ui.fragment.PartidaFragment
 
 class MainFragment: Fragment() {
 
@@ -31,7 +32,7 @@ class MainFragment: Fragment() {
         val boton: Button = view.findViewById(R.id.btn_lista)
         boton.setOnClickListener{
             parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, PartidasFragment())
+                .replace(R.id.fragment_container, PartidaFragment())
                 .addToBackStack(null)
                 .commit()
         }

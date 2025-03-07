@@ -14,8 +14,9 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import com.example.version1_1.LoginActivity
 import com.example.version1_1.R
+import com.example.version1_1.data.service.RetrofitClient
 import com.example.version1_1.databinding.ActivityMainBinding
-import com.example.version1_1.ui.views.fragment.PartidasFragment
+import com.example.version1_1.ui.fragment.PartidaFragment
 import com.example.version1_1.ui.views.fragment.MainFragment
 import com.example.version1_1.ui.views.fragment.SettingsFragment
 import com.google.android.material.navigation.NavigationView
@@ -63,7 +64,7 @@ class MainActivity : AppCompatActivity() {
         navView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.nav_home -> navigateToFragment(MainFragment())
-                R.id.nav_profile -> navigateToFragment(PartidasFragment())
+                R.id.nav_profile -> navigateToFragment(PartidaFragment())
                 R.id.nav_settings -> navigateToFragment(SettingsFragment())
             }
             // Cerrar el drawer después de seleccionar una opción
@@ -75,6 +76,8 @@ class MainActivity : AppCompatActivity() {
             navigateToFragment(MainFragment())
             navView.setCheckedItem(R.id.nav_home)
         }
+
+        RetrofitClient.init(applicationContext)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

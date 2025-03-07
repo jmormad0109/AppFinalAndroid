@@ -9,5 +9,5 @@
         android:id="@+id/listFragment"
         android:name="com.example.version1_1.ui.views.fragment.PartidasFragment"
         android:label="fragment_list"
-        tools:layout="@layout/fragment_list" />
+        tools:layout="@layout/fragment_partida" />
 </navigation>
